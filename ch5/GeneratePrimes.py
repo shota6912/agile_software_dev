@@ -16,39 +16,49 @@ you have passed the aquare root of the maximum value.
 import math
 
 class GeneratePrimes:
-    def __init__(self):
-        pass
 
     def generatePrimes(self, maxValue):
         if maxValue < 2:
             return []
 
         else:
-            self.initializeArrayOfIntegers(maxValue)
+            self.uncrossIntegersUpTo(maxValue)
             self.crossOutMultiples()
             self.putUncrossedIntegersIntoResult()
             return self.result
 
-    def putUncrossedIntegersIntoResult(self):
-        self.count = 0
-        for i in range(len(self.f)):
-            if self.f[i]:
-                self.count += 1
-
-        self.result = [0 for i in range(self.count)]      
-        j = 0
-        for i in range(len(self.f)):
-            if self.f[i]:
-                self.result[j] = i
-                j += 1
-        return self.result
+    def uncrossIntegersUpTo(self, maxValue):
+        self.crossedOut = [False for i in range(maxValue + 1)]
+        self.crossedOut[0] = self.crossedOut[1] = True
 
     def crossOutMultiples(self):
-        for i in range(2, int(math.sqrt(len(self.f))) + 1):
-            if self.f[i]:
-                for j in range(2 * i, len(self.f), i):
-                    self.f[j] = False
+        maxPrimeFactor = self.calcMaxPrimeFactor()
+        for i in range(2, maxPrimeFactor):
+            if self.notCrossed(i):
+                self.crossOutMultipleOf(i)
 
-    def initializeArrayOfIntegers(self, maxValue):
-        self.f = [True for i in range(maxValue + 1)]
-        self.f[0] = self.f[1] = False
+    def calcMaxPrimeFactor(self):
+        maxPrimeFactor = int(math.sqrt(len(self.crossedOut))) + 1
+        return maxPrimeFactor
+
+    def crossOutMultipleOf(self, i):
+        for multiple in range(2 * i, len(self.crossedOut), i):
+            self.crossedOut[multiple] = True
+
+    def notCrossed(self, i):
+        return self.crossedOut[i] == False
+
+    def putUncrossedIntegersIntoResult(self):
+        self.result = [0 for i in range(self.numberOfUncrossedIntegers())]      
+        j = 0
+        for i in range(len(self.crossedOut)):
+            if self.notCrossed(i):
+                self.result[j] = i
+                j += 1
+
+    def numberOfUncrossedIntegers(self):
+        count = 0
+        for i in range(len(self.crossedOut)):
+            if self.notCrossed(i):
+                count += 1
+        return count

@@ -16,5 +16,17 @@ class testGeneratePrimes(unittest.TestCase):
         assert len(centArray) == 25
         assert centArray[24] == 97
 
+    def testExhaustive(self):
+        for i in range(2, 500):
+            self.__verifyPrimeList(GeneratePrimes().generatePrimes(i))
+
+    def __verifyPrimeList(self, prime_list):
+        for i in range(len(prime_list)):
+            self.__verifyPrime(prime_list[i])
+
+    def __verifyPrime(self, n):
+        for factor in range(2, n):
+            assert (n % factor) != 0
+
 if __name__ == "__main__":
     unittest.main()
