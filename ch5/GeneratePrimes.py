@@ -24,32 +24,31 @@ class GeneratePrimes:
             return []
 
         else:
-            self.initializeSieve(maxValue)
-            self.sieve()
-            self.loadPrimes()
-            return self.primes
+            self.initializeArrayOfIntegers(maxValue)
+            self.crossOutMultiples()
+            self.putUncrossedIntegersIntoResult()
+            return self.result
 
-    def loadPrimes(self):
+    def putUncrossedIntegersIntoResult(self):
         self.count = 0
-        for i in range(self.s):
+        for i in range(len(self.f)):
             if self.f[i]:
                 self.count += 1
 
-        self.primes = [0 for i in range(self.count)]      
+        self.result = [0 for i in range(self.count)]      
         j = 0
-        for i in range(self.s):
+        for i in range(len(self.f)):
             if self.f[i]:
-                self.primes[j] = i
+                self.result[j] = i
                 j += 1
-        return self.primes
+        return self.result
 
-    def sieve(self):
-        for i in range(2, int(math.sqrt(self.s)) + 1):
+    def crossOutMultiples(self):
+        for i in range(2, int(math.sqrt(len(self.f))) + 1):
             if self.f[i]:
-                for j in range(2 * i, self.s, i):
+                for j in range(2 * i, len(self.f), i):
                     self.f[j] = False
 
-    def initializeSieve(self, maxValue):
-        self.s = maxValue + 1
-        self.f = [True for i in range(self.s)]
+    def initializeArrayOfIntegers(self, maxValue):
+        self.f = [True for i in range(maxValue + 1)]
         self.f[0] = self.f[1] = False
